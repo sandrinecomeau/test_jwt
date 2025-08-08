@@ -1,0 +1,54 @@
+# --- Build Results ---
+bin/
+obj/
+
+# --- User-specific files ---
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# --- VSCode settings ---
+.vscode/
+
+# --- Dotnet CLI ---
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# --- ASP.NET Scaffolding ---
+ScaffoldingReadMe.txt
+
+# --- DotCover ---
+.idea/
+*.dotCover
+
+# --- Backup & temp files ---
+*.swp
+*~
+*.tmp
+*.bak
+*.old
+*.orig
+
+# --- Logs ---
+*.log
+
+# --- OS-specific files ---
+.DS_Store
+Thumbs.db
+
+# --- Rider (JetBrains) ---
+.idea/
+
+# --- NuGet ---
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+*.nuspec
+project.assets.json
+
+# --- Others ---
+*.db
+*.sqlite
