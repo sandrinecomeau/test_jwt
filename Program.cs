@@ -7,7 +7,18 @@ var builder = WebApplication.CreateBuilder(args);
 var keyBytes = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"].Trim());
 var signingKey = new SymmetricSecurityKey(keyBytes);
 
-// Add services to the container.
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocal",
+        policy => policy
+            .WithOrigins(
+                "http://127.0.0.1:5500"
+            )
+            .AllowAnyHeader()
+    );
+});
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -25,20 +36,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateLifetime = true,
             ClockSkew = TimeSpan.FromSeconds(30)
         };
-
-        // (optionnel) aide au debug : voir si c’est bien “expired”
-        options.Events = new JwtBearerEvents
-        {
-            OnAuthenticationFailed = ctx =>
-            {
-                if (ctx.Exception is SecurityTokenExpiredException)
-                {
-                    // ajoute un header pour voir l’expiration côté client
-                    ctx.Response.Headers.Append("Token-Expired", "true");
-                }
-                return Task.CompletedTask;
-            }
-        };
     });
 
 builder.Services.AddAuthorization();
@@ -49,6 +46,7 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseCors("AllowLocal");
 app.UseAuthentication(); 
 app.UseAuthorization();
 

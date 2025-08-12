@@ -9,8 +9,8 @@ public class WeatherController : ControllerBase
 {
     private static readonly string[] Summaries = new[]
     {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild",
-        "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+        "Neige", "Pluie", "Nuageux", "Partiellement ensoleillé", "Soleil",
+        "Verglas", "Orages", "Orages violents", "Brume", "Brouillard"
     };
 
     [Authorize]
@@ -23,9 +23,8 @@ public class WeatherController : ControllerBase
         var data = Enumerable.Range(0, 5).Select(i => new
         {
             Date = start.AddDays(i),
-            TemperatureC = rng.Next(-20, 35),
-            TemperatureF = 32 + (int)(rng.Next(-20, 35) / 0.5556),
-            Summary = Summaries[rng.Next(Summaries.Length)]
+            Temperature = rng.Next(-20, 35),
+            Météo = Summaries[rng.Next(Summaries.Length)]
         });
 
         return Ok(data);
