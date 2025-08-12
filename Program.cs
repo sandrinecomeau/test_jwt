@@ -3,7 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-var key = builder.Configuration["Jwt:Key"];
+var signingKey = JwtKeyHelper.BuildSigningKey(builder.Configuration);
 
 // Add services to the container.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -14,7 +14,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuer = false,
             ValidateAudience = false,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+            IssuerSigningKey = signingKey
         };
     });
 
@@ -25,33 +25,18 @@ var app = builder.Build();
 
 
 app.UseHttpsRedirection();
+app.UseRouting();
 app.UseAuthentication(); 
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.MapFallback(async context =>
+{
+    var ep = context.GetEndpoint()?.DisplayName ?? "(null)";
+    var path = context.Request.Path.Value ?? "";
+    var basePath = context.Request.PathBase.Value ?? "";
+    await context.Response.WriteAsync($"FALLBACK hit\nPathBase='{basePath}'\nPath='{path}'\nMatched='{ep}'");
+});
 app.Run();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
