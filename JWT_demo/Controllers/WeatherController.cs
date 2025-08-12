@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace JwtDemo.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("weather")]
 public class WeatherController : ControllerBase
 {
     private static readonly string[] Summaries = new[]
