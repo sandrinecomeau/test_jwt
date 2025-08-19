@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 var keyBytes = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"].Trim());
 var signingKey = new SymmetricSecurityKey(keyBytes);
 
-
+//juste dans le cadre de cette démo pour le HTML
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocal",
@@ -69,6 +69,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+
+// Autre façon de mettre des permissions non utilisée dans le cadre de cette démo car redondance
 // builder.Services.AddAuthorization(options =>
 // {
 //     options.AddPolicy("AdminsOnly", policy =>

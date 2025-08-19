@@ -6,15 +6,11 @@ input {
     margin-left: .5rem; 
 }
 
-#tokenResult{ 
-    margin: 1rem 0;padding: 1rem; border: 1px solid #ccc; white-space: pre-wrap;
+p { 
+    margin: 8px 0 20px 0;padding: 3px; border: 1px solid #ccc; white-space: pre-wrap; height: 15vh;  overflow: scroll 
 }
 
 #tokenText { 
     overflow-wrap: break-word;
-}
-
-#weatherResult { 
-    margin-top: 1rem; padding: 1rem; border: 1px solid #ccc; white-space: pre-wrap; height: 40vh; overflow: scroll ;
 }
 

@@ -11,7 +11,19 @@
   <h1>API Météo</h1>
 
   <button id="getToken">POST https://localhost:7175/auth/login</button>
-  <div id="tokenResult">
+  <input
+    type="text"
+    id="username"
+    name="username"
+    required
+    minlength="4"
+    maxlength="100"
+    size="20"
+    placeholder="nom d'utilisateur"
+    value=""
+  />
+  <button id="getToken">POST https://localhost:7175/auth/logout</button>
+  <div id="tokenResult"> 
     <p id="tokenText">Aucun token</p>
   </div>
 
@@ -25,12 +37,29 @@
     minlength="4"
     maxlength="500"
     size="70"
-    placeholder="add token here"
+    placeholder="ajoutez un jeton"
     value=""
   />
 
   <div id="weatherResult">
-    <p id="weatherText">Aucun résultats</p>
+    <p id="weatherText">Aucun résultat</p>
+  </div>
+
+    <button id="getWeatherAdmin">GET https://localhost:7175/weather/admin</button>
+  <input
+    type="text"
+    id="tokenInputAdmin"
+    name="tokenInputAdmin"
+    required
+    minlength="4"
+    maxlength="500"
+    size="70"
+    placeholder="ajoutez un jeton"
+    value=""
+  />
+
+  <div id="weatherResultAdmin">
+    <p id="weatherTextAdmin">Aucun résultat</p>
   </div>
 
   <script src="main.js"></script>
