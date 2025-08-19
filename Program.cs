@@ -20,6 +20,8 @@ builder.Services.AddCors(options =>
     );
 });
 
+builder.Services.AddSingleton<IAuthService, AuthService>();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {

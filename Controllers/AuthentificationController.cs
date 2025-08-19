@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -8,19 +9,26 @@ namespace JwtDemo.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IConfiguration _config;
+    private readonly IAuthService _auth;
 
-    public AuthController(IConfiguration config)
+    public AuthController(IConfiguration config, IAuthService auth)
     {
         _config = config;
+        _auth = auth;
     }
 
     [HttpPost("login")]
-    public IActionResult Login()
+    public IActionResult Login([FromBody] LoginDto dto)
     {
+        if (dto is null || string.IsNullOrWhiteSpace(dto.Username))
+            return BadRequest(new { error = "username/password requis" });
+
+        if (!_auth.ValidateUser(dto.Username, out var user))
+            return Unauthorized(new { error = "Identifiants invalides" });
         var claims = new[]
         {
-            new Claim(ClaimTypes.Name, "sandrine"),
-            new Claim(ClaimTypes.Role, "admin2k")
+            new Claim(ClaimTypes.Name, user!.Username),
+            new Claim(ClaimTypes.Role, user.Role)
         };
 
         var token = JwtTokenGenerator.GenerateToken(
@@ -34,3 +42,6 @@ public class AuthController : ControllerBase
         return Ok(new { token });
     }
 }
+
+
+
