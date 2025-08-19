@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,11 +35,46 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = signingKey,
 
             ValidateLifetime = true,
-            ClockSkew = TimeSpan.FromSeconds(30)
+            RequireExpirationTime = true,
+            RequireSignedTokens = true,
+            ClockSkew = TimeSpan.FromSeconds(30),
+
+            NameClaimType = ClaimTypes.Name,
+            RoleClaimType = ClaimTypes.Role,
+
+            ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha256 }
+
+        };
+
+        //facultatif, je l'ai mis pour débugger 
+        options.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = ctx =>
+            {
+                Console.WriteLine($"[JWT FAIL] {ctx.Exception.GetType().Name}: {ctx.Exception.Message}");
+                return Task.CompletedTask;
+            },
+            OnChallenge = ctx =>
+            {
+                Console.WriteLine($"[JWT CHALLENGE] {ctx.Error} - {ctx.ErrorDescription}");
+                return Task.CompletedTask;
+            },
+            OnTokenValidated = ctx =>
+            {
+                Console.WriteLine("[JWT OK] token validé");
+                return Task.CompletedTask;
+            }
         };
     });
 
+// builder.Services.AddAuthorization(options =>
+// {
+//     options.AddPolicy("AdminsOnly", policy =>
+//         policy.RequireRole("admin"));
+// });
+
 builder.Services.AddAuthorization();
+
 builder.Services.AddControllers();
 
 var app = builder.Build();

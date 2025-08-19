@@ -20,7 +20,7 @@ public class AuthController : ControllerBase
         var claims = new[]
         {
             new Claim(ClaimTypes.Name, "sandrine"),
-            new Claim(ClaimTypes.Role, "admin")
+            new Claim(ClaimTypes.Role, "admin2k")
         };
 
         var token = JwtTokenGenerator.GenerateToken(

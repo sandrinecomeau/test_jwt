@@ -29,4 +29,15 @@ public class WeatherController : ControllerBase
 
         return Ok(data);
     }
+
+    [Authorize(Roles = "admin")]
+    [HttpGet("admin")]
+    public IActionResult GetAdminWeather()
+    {
+        return Ok(new
+        {
+            Message = "Admin weather dashboard",
+            GeneratedAtUtc = DateTime.UtcNow
+        });
+    }
 }

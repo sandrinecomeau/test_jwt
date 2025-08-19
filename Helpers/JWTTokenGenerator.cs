@@ -26,6 +26,7 @@ public static class JwtTokenGenerator
             issuer: issuer,
             audience: audience,
             claims: claims,
+            notBefore: DateTime.UtcNow.AddSeconds(-5),
             expires: DateTime.UtcNow.AddMinutes(expiryMinutes),
             signingCredentials: creds
         );
